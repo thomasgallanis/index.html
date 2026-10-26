@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Finora – Asset Recovery &amp; Digital Forensics</title>
+<meta name="description" content="Finora unterstützt Opfer von Kryptowährungs-Betrug, Wallet-Diebstahl, Phishing und Ransomware mit rechtlicher und technischer Expertise."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ════════════════════════════════════
+   COLOR TOKENS — PROFESSIONAL BLUE + GOLD
+════════════════════════════════════ */
+:root,[data-theme="dark"]{
+  --bg:          #0B1724;
+  --surface:     #152030;
+  --surface2:    #0E1A29;
+  --accent:      #2563EB;
+  --accent-dark: #1D4ED8;
+  --gold:        #D4AF37;
+  --gold-dark:   #B8960F;
+  --text:        #F8FAFC;
+  --text-muted:  rgba(248,250,252,.65);
+  --text-dim:    rgba(248,250,252,.35);
+  --border:      rgba(248,250,252,.09);
+  --border-mid:  rgba(248,250,252,.18);
+  --hero-bg:     #060E1A;
+  --navbar-bg:   #060E1A;
+  --input-bg:    #0E1A29;
+  --input-text:  #F8FAFC;
+  --card-shadow: 0 4px 28px rgba(0,0,0,.5);
+  --success-bg:  #0A1F36;
+  --success-border:#1B4A7A;
+  --success-text:#60A5FA;
+}
+[data-theme="light"]{
+  --bg:          #EEF2FA;
+  --surface:     #FFFFFF;
+  --surface2:    #E4EAF5;
+  --accent:      #1E40AF;
+  --accent-dark: #1E3A8A;
+  --gold:        #A07810;
+  --gold-dark:   #8A660A;
+  --text:        #0B1724;
+  --text-muted:  rgba(11,23,36,.64);
+  --text-dim:    rgba(11,23,36,.38);
+  --border:      rgba(11,23,36,.11);
+  --border-mid:  rgba(11,23,36,.2);
+  --hero-bg:     #060E1A;
+  --navbar-bg:   #FFFFFF;
+  --input-bg:    #FFFFFF;
+  --input-text:  #0B1724;
+  --card-shadow: 0 4px 24px rgba(11,23,36,.1);
+  --success-bg:  #EFF6FF;
+  --success-border:#BFDBFE;
+  --success-text:#1D4ED8;
+}
+
+/* ════════════════════════════════════
+   RESET & BASE
+════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  transition:background .25s,color .25s;
+}
+h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif;line-height:1.18}
+a{color:inherit;text-decoration:none}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+
+/* ════════════════════════════════════
+   LAYOUT
+════════════════════════════════════ */
+.container{max-width:1160px;margin:0 auto;padding:0 1.5rem}
+.section{padding:5rem 0}
+.section-light{background:var(--surface2)}
+.section-alt{background:var(--surface)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:1.5rem}
+@media(max-width:960px){.grid-2,.grid-4{grid-template-columns:1fr;gap:2rem}}
+@media(max-width:600px){.grid-auto{grid-template-columns:1fr}}
+
+/* ════════════════════════════════════
+   TYPOGRAPHY
+════════════════════════════════════ */
+.section-tag{display:block;font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
+.accent-rule{display:block;width:40px;height:3px;background:var(--gold);border-radius:2px;margin-bottom:1rem}
+.section-title{font-size:clamp(1.55rem,3vw,2.1rem);color:var(--text);margin-bottom:.4rem}
+.text-center{text-align:center}
+
+/* ════════════════════════════════════
+   BUTTONS
+════════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.68rem 1.55rem;border-radius:5px;font-size:.875rem;font-weight:600;border:none;cursor:pointer;transition:background .18s,color .18s,border-color .18s,box-shadow .18s;line-height:1}
+.btn-accent{background:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(37,99,235,.3)}
+.btn-accent:hover{background:var(--accent-dark);box-shadow:0 4px 20px rgba(37,99,235,.45)}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border-mid)}
+.btn-ghost:hover{background:rgba(37,99,235,.1);border-color:var(--accent);color:var(--accent)}
+.btn-sm{padding:.42rem .95rem;font-size:.8rem}
+.btn-full{width:100%;justify-content:center;padding:.75rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ════════════════════════════════════
+   NAVBAR
+════════════════════════════════════ */
+#navbar{
+  position:sticky;top:0;z-index:200;
+  background:var(--navbar-bg);
+  border-bottom:1px solid var(--border);
+  height:64px;display:flex;align-items:center;
+  transition:background .25s,border-color .25s;
+}
+.nav-inner{display:flex;align-items:center;gap:1rem;width:100%}
+.nav-logo{display:flex;align-items:center;gap:.7rem;background:none;border:none;cursor:pointer;flex-shrink:0;padding:0}
+.nav-logo-mark{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--accent);letter-spacing:-.02em}
+.nav-logo-divider{width:1px;height:24px;background:var(--border-mid)}
+.nav-logo-sub{font-size:.6rem;color:var(--text-muted);font-weight:500;max-width:145px;line-height:1.3;text-align:left}
+.nav-links{display:flex;align-items:center;gap:1.6rem;margin-left:auto}
+.nav-link{font-size:.85rem;font-weight:500;color:var(--text-muted);background:none;border:none;padding:4px 0;cursor:pointer;transition:color .15s}
+.nav-link:hover,.nav-link.active{color:var(--accent);font-weight:600}
+.nav-controls{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+.theme-toggle{background:var(--surface);border:1px solid var(--border-mid);border-radius:50px;padding:3px;width:52px;height:28px;cursor:pointer;display:flex;align-items:center;position:relative;transition:background .2s;flex-shrink:0}
+.theme-toggle-knob{width:22px;height:22px;border-radius:50%;background:var(--accent);position:absolute;left:3px;transition:left .22s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:center;font-size:11px}
+[data-theme="light"] .theme-toggle-knob{left:27px}
+.theme-toggle-icon{pointer-events:none;user-select:none}
+.lang-btn{background:none;border:1px solid var(--border-mid);border-radius:4px;padding:.26rem .55rem;font-size:.73rem;font-weight:700;letter-spacing:.06em;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.lang-btn:hover,.lang-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.hamburger{display:none;background:none;border:none;padding:4px;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{display:block;width:21px;height:2px;background:var(--text-muted);border-radius:2px}
+@media(max-width:780px){.nav-links{display:none}.hamburger{display:flex}}
+#mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--navbar-bg);z-index:190;padding:1.5rem;border-top:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.25);flex-direction:column;gap:1.1rem;transition:background .25s}
+#mobile-menu.open{display:flex}
+.mobile-nav-link{font-size:.95rem;font-weight:500;color:var(--text-muted);background:none;border:none;text-align:left;padding:.35rem 0;cursor:pointer}
+.mobile-nav-link:hover{color:var(--accent)}
+
+/* ════════════════════════════════════
+   PAGES
+════════════════════════════════════ */
+.page{display:none}
+.page.active{display:block}
+
+/* ════════════════════════════════════
+   HERO + PARALLAX
+════════════════════════════════════ */
+.hero{
+  background:var(--hero-bg);
+  position:relative;overflow:hidden;
+  padding:5.5rem 0 6rem;
+}
+/* Parallax layer: blue dot grid */
+.hero-dots{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(37,99,235,.22) 1px,transparent 0);
+  background-size:30px 30px;
+  pointer-events:none;
+  will-change:transform;
+}
+/* Parallax layer: blue radial glow top-right */
+.hero-glow{
+  position:absolute;top:-25%;right:-12%;width:60%;height:150%;
+  background:radial-gradient(ellipse at top right,rgba(37,99,235,.22),transparent 65%);
+  pointer-events:none;
+  will-change:transform;
+}
+/* Parallax layer: gold radial glow bottom-left */
+.hero-glow-gold{
+  position:absolute;bottom:-20%;left:-10%;width:50%;height:80%;
+  background:radial-gradient(ellipse at bottom left,rgba(212,175,55,.1),transparent 65%);
+  pointer-events:none;
+  will-change:transform;
+}
+/* Parallax layer: floating geometric shapes */
+.hero-float{
+  position:absolute;pointer-events:none;border-radius:50%;will-change:transform;
+  animation:heroFloat 8s ease-in-out infinite;
+}
+.hero-float-1{
+  width:280px;height:280px;
+  top:10%;right:8%;
+  background:radial-gradient(circle,rgba(37,99,235,.07),transparent 70%);
+  border:1px solid rgba(37,99,235,.12);
+  animation-duration:9s;
+}
+.hero-float-2{
+  width:160px;height:160px;
+  bottom:15%;left:5%;
+  background:radial-gradient(circle,rgba(212,175,55,.07),transparent 70%);
+  border:1px solid rgba(212,175,55,.12);
+  animation-duration:7s;animation-delay:-3s;
+}
+.hero-float-3{
+  width:80px;height:80px;
+  top:30%;left:35%;
+  background:rgba(37,99,235,.05);
+  border:1px solid rgba(37,99,235,.1);
+  animation-duration:11s;animation-delay:-1.5s;
+}
+@keyframes heroFloat{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  33%{transform:translateY(-12px) rotate(2deg)}
+  66%{transform:translateY(8px) rotate(-1.5deg)}
+}
+/* Hero content — z-index above all parallax layers */
+.hero-content{position:relative;z-index:2}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1fr 420px;
+  gap:3.5rem;align-items:center;
+}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:3rem}}
+/* Hero text always white (hero-bg always dark) */
+.hero-tag{color:var(--gold)!important}
+.hero h1{font-size:clamp(2rem,4.5vw,3.2rem);color:#F8FAFC;margin-bottom:1.1rem;font-weight:700}
+.hero p{font-size:1rem;color:rgba(248,250,252,.76);margin-bottom:2.25rem;max-width:530px;line-height:1.75}
+.hero-btns{display:flex;flex-wrap:wrap;gap:.85rem}
+/* Hero form card — always dark glass */
+.hero-form-card{
+  background:rgba(21,32,48,.92);
+  border:1px solid rgba(248,250,252,.14);
+  border-top:3px solid var(--gold);
+  border-radius:8px;padding:2rem 1.75rem;
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+  backdrop-filter:blur(10px);
+}
+.hero-form-card label{color:rgba(248,250,252,.68)}
+.hero-form-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:#F8FAFC;margin-bottom:.35rem}
+.hero-form-sub{font-size:.8rem;color:rgba(248,250,252,.58);margin-bottom:1.5rem}
+.hero-form-card input{background:rgba(6,14,26,.7);border-color:rgba(248,250,252,.18);color:#F8FAFC}
+.hero-form-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.2)}
+.hero-form-card input::placeholder{color:rgba(248,250,252,.32)}
+
+/* ════════════════════════════════════
+   STATS BAR
+════════════════════════════════════ */
+.stats-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:2.5rem 0;transition:background .25s}
+.stat-item{border-left:3px solid var(--gold);padding-left:1rem}
+@media(max-width:960px){.stats-bar .grid-4{grid-template-columns:1fr 1fr;gap:1.5rem}}
+.stat-value{font-family:'Playfair Display',serif;font-size:1.85rem;font-weight:700;color:var(--text)}
+.stat-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-top:.15rem}
+
+/* ════════════════════════════════════
+   CARDS
+════════════════════════════════════ */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:1.75rem;transition:background .25s,border-color .25s}
+.card-hover{transition:transform .2s,box-shadow .2s,background .25s,border-color .25s;cursor:pointer}
+.card-hover:hover{transform:translateY(-3px);box-shadow:var(--card-shadow);border-color:var(--accent)}
+.card-icon{width:46px;height:46px;background:rgba(37,99,235,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.card-icon svg{width:22px;height:22px;stroke:var(--accent)}
+.card-title{font-size:1rem;color:var(--text);margin-bottom:.4rem;font-family:'Playfair Display',serif;font-weight:700}
+.card-text{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+/* Page header — always dark */
+.page-header{background:var(--hero-bg);padding:4rem 0;border-bottom:1px solid rgba(248,250,252,.09)}
+.page-header h1{font-size:clamp(1.9rem,4vw,2.8rem);color:#F8FAFC;margin-top:.4rem}
+.page-header .section-tag{color:var(--gold)}
+/* Trust */
+.trust-icon{width:42px;height:42px;background:rgba(37,99,235,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.trust-icon svg{width:20px;height:20px;stroke:var(--accent)}
+.trust-item{display:flex;gap:.85rem;align-items:flex-start}
+.trust-title{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.25rem}
+.trust-text{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+/* Testimonials */
+.testimonial{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:1.5rem;border-left:3px solid var(--gold);transition:background .25s}
+.testimonial blockquote{font-style:italic;color:var(--text-muted);font-size:.9rem;line-height:1.7;margin-bottom:.85rem}
+.testimonial-name{font-weight:700;font-size:.85rem;color:var(--text)}
+.testimonial-role{font-size:.78rem;color:var(--text-dim)}
+/* CTA band */
+.cta-band{background:var(--accent);padding:4.5rem 0;text-align:center}
+.cta-band h2{font-size:clamp(1.5rem,3vw,2.1rem);color:#fff;margin-bottom:.7rem}
+.cta-band p{color:rgba(255,255,255,.85);font-size:.95rem;max-width:460px;margin:0 auto 1.75rem}
+/* Value cards */
+.value-card{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--gold);border-radius:7px;padding:1.5rem;transition:background .25s}
+.value-title{font-size:1.05rem;color:var(--text);margin:.7rem 0 .4rem;font-family:'Playfair Display',serif;font-weight:700}
+.value-text{font-size:.875rem;color:var(--text-muted);line-height:1.6}
+.value-icon svg{stroke:var(--accent)}
+/* Expertise */
+.expertise-item{display:flex;align-items:flex-start;gap:.7rem;padding:.85rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:5px;font-size:.875rem;color:var(--text-muted);font-weight:500;transition:background .25s}
+.expertise-item svg{flex-shrink:0;stroke:var(--accent);margin-top:1px}
+
+/* ════════════════════════════════════
+   FORMS
+════════════════════════════════════ */
+.form-group{margin-bottom:1.1rem}
+label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.32rem}
+input,textarea,select{width:100%;padding:.58rem .85rem;border:1px solid var(--border-mid);border-radius:5px;font-family:'Inter',sans-serif;font-size:.875rem;color:var(--input-text);background:var(--input-bg);outline:none;transition:border-color .18s,box-shadow .18s,background .25s,color .25s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.18)}
+textarea{resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:540px){.form-row{grid-template-columns:1fr}}
+.checkbox-wrap{display:flex;gap:.65rem;align-items:flex-start}
+.checkbox-wrap input[type=checkbox]{width:17px;height:17px;flex-shrink:0;margin-top:2px;accent-color:var(--accent);cursor:pointer}
+.checkbox-label{font-size:.82rem;color:var(--text-muted);line-height:1.55;cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400}
+/* Step indicator */
+.steps{display:flex;margin-bottom:2rem}
+.step{flex:1;text-align:center;position:relative;padding:.35rem}
+.step:not(:last-child)::after{content:'';position:absolute;top:12px;left:50%;width:100%;height:2px;background:var(--border-mid);z-index:0}
+.step-dot{width:26px;height:26px;border-radius:50%;background:var(--surface);border:2px solid var(--border-mid);color:var(--text-muted);display:flex;align-items:center;justify-content:center;margin:0 auto .32rem;font-weight:700;font-size:.75rem;position:relative;z-index:1;transition:background .2s,color .2s,border-color .2s}
+.step.active .step-dot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.step.done .step-dot{background:var(--surface);color:var(--accent);border-color:var(--accent)}
+.step-label{font-size:.72rem;color:var(--text-dim);font-weight:500}
+.step.active .step-label{color:var(--accent);font-weight:700}
+.step.done .step-label{color:var(--text-muted)}
+/* Accordion */
+.accordion-item{border-bottom:1px solid var(--border)}
+.accordion-btn{width:100%;background:none;border:none;padding:.85rem 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif;font-size:.875rem;font-weight:600;color:var(--text-muted)}
+.accordion-btn:hover{color:var(--accent)}
+.accordion-icon{flex-shrink:0;stroke:currentColor;transition:transform .25s}
+.accordion-icon.open{transform:rotate(180deg)}
+.accordion-body{max-height:0;overflow:hidden;transition:max-height .28s ease,padding .28s ease;font-size:.85rem;color:var(--text-muted);line-height:1.7}
+.accordion-body.open{max-height:280px;padding-bottom:.85rem}
+/* Success / error */
+.success-box{background:var(--success-bg);border:1px solid var(--success-border);border-radius:7px;padding:2rem;text-align:center}
+.success-box h3{font-family:'Playfair Display',serif;color:var(--success-text);margin:.7rem 0 .5rem;font-size:1.5rem}
+.success-box p{color:var(--success-text);font-size:.875rem;opacity:.9}
+.success-ref{background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);border-radius:5px;padding:.6rem 1.2rem;display:inline-block;margin:.5rem 0 1rem;font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;color:var(--accent)}
+.error-msg{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.3);border-radius:4px;padding:.6rem .9rem;font-size:.82rem;color:var(--accent);margin-bottom:.85rem}
+.review-row{display:flex;gap:1rem;margin-bottom:.65rem;font-size:.875rem}
+.review-label{font-weight:700;color:var(--text-muted);min-width:145px;flex-shrink:0}
+.review-value{color:var(--text)}
+/* Prose */
+.prose{max-width:780px;color:var(--text-muted);font-size:.95rem;line-height:1.8}
+.prose h2{font-size:1.35rem;color:var(--text);margin:2.25rem 0 .7rem;font-family:'Playfair Display',serif}
+.prose p{margin-bottom:1rem}
+.prose strong{color:var(--text)}
+
+/* ════════════════════════════════════
+   FOOTER — always dark
+════════════════════════════════════ */
+footer{background:var(--hero-bg);border-top:1px solid rgba(248,250,252,.09);padding:4rem 0 2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.6fr;gap:3rem;margin-bottom:3rem}
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:580px){.footer-grid{grid-template-columns:1fr}}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#F8FAFC;margin-bottom:.8rem}
+.footer-tagline{color:rgba(248,250,252,.58);font-size:.85rem;line-height:1.7;margin-bottom:1rem}
+.footer-col-title{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,250,252,.32);margin-bottom:.85rem}
+.footer-link{display:block;color:rgba(248,250,252,.58);font-size:.85rem;padding:.2rem 0;background:none;border:none;text-align:left;cursor:pointer;transition:color .15s}
+.footer-link:hover{color:var(--gold)}
+.footer-contact-item{display:flex;gap:.55rem;align-items:flex-start;margin-bottom:.55rem}
+.footer-contact-icon{flex-shrink:0;margin-top:2px}
+.footer-contact-text{color:rgba(248,250,252,.58);font-size:.8rem;line-height:1.5}
+.footer-bottom{border-top:1px solid rgba(248,250,252,.09);padding-top:1.5rem;text-align:center;color:rgba(248,250,252,.3);font-size:.78rem}
+/* Utility */
+.hidden{display:none!important}
+.mt-2{margin-top:1rem}.mt-3{margin-top:1.5rem}.mt-4{margin-top:2rem}
+.mb-2{margin-bottom:1rem}.mb-3{margin-bottom:1.5rem}.mb-4{margin-bottom:2rem}
+.gap-col{display:flex;flex-direction:column;gap:1.25rem}
+.icon-accent{stroke:var(--accent)}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     NAVBAR
+════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <button class="nav-logo" onclick="showPage('home')">
+        <span class="nav-logo-mark">Finora</span>
+        <span class="nav-logo-divider" style="width:1px;height:24px;background:var(--border-mid)"></span>
+        <span class="nav-logo-sub" id="nav-sub">Krypto-Rückgewinnung<br>&amp; Asset Recovery</span>
+      </button>
+      <div class="nav-links">
+        <button class="nav-link active" id="nl-home"     onclick="showPage('home')"     data-i18n="nav_home">Startseite</button>
+        <button class="nav-link"        id="nl-about"    onclick="showPage('about')"    data-i18n="nav_about">Über uns</button>
+        <button class="nav-link"        id="nl-services" onclick="showPage('services')" data-i18n="nav_services">Leistungen</button>
+        <button class="nav-link"        id="nl-contact"  onclick="showPage('contact')"  data-i18n="nav_contact">Kontakt</button>
+      </div>
+      <div class="nav-controls">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Dark/Light mode" aria-label="Toggle theme">
+          <span class="theme-toggle-knob"><span class="theme-toggle-icon" id="theme-icon">🌙</span></span>
+        </button>
+        <button class="lang-btn active" id="btn-de" onclick="setLang('de')">DE</button>
+        <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
+        <button class="btn btn-accent btn-sm" onclick="showPage('submit-case')" data-i18n="nav_case">Fall einreichen</button>
+        <button class="hamburger" onclick="toggleMobile()" aria-label="Menü"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="mobile-menu">
+  <button class="mobile-nav-link" onclick="showPage('home');closeMobile()"     data-i18n="nav_home">Startseite</button>
+  <button class="mobile-nav-link" onclick="showPage('about');closeMobile()"    data-i18n="nav_about">Über uns</button>
+  <button class="mobile-nav-link" onclick="showPage('services');closeMobile()" data-i18n="nav_services">Leistungen</button>
+  <button class="mobile-nav-link" onclick="showPage('contact');closeMobile()"  data-i18n="nav_contact">Kontakt</button>
+  <button class="btn btn-accent btn-full" onclick="showPage('submit-case');closeMobile()" data-i18n="nav_case">Fall einreichen</button>
+</div>
+
+<!-- ════════════════════════════════════
+     HOME PAGE
+════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero with parallax layers -->
+  <section class="hero">
+    <div class="hero-dots"      id="px-dots"></div>
+    <div class="hero-glow"      id="px-glow"></div>
+    <div class="hero-glow-gold" id="px-gold"></div>
+    <div class="hero-float hero-float-1" id="px-f1"></div>
+    <div class="hero-float hero-float-2" id="px-f2"></div>
+    <div class="hero-float hero-float-3" id="px-f3"></div>
+
+    <div class="container hero-content">
+      <div class="hero-grid">
+        <!-- Left: text -->
+        <div>
+          <span class="section-tag hero-tag" data-i18n="hero_tag">Finora — Vertrauenswürdig. Kompetent. Diskret.</span>
+          <h1 data-i18n="hero_title">Ihre vertrauenswürdige Instanz für Krypto-Rückgewinnung</h1>
+          <p data-i18n="hero_sub">Wir unterstützen Opfer von Kryptowährungs-Betrug, Wallet-Diebstahl, Phishing-Angriffen und Ransomware mit rechtlicher und technischer Expertise.</p>
+          <div class="hero-btns">
+            <button class="btn btn-accent" onclick="showPage('submit-case')" data-i18n="hero_cta">Fall kostenlos prüfen lassen</button>
+            <button class="btn" onclick="showPage('services')" style="background:transparent;color:#F8FAFC;border:1.5px solid rgba(248,250,252,.3)" onmouseover="this.style.background='rgba(37,99,235,.2)';this.style.borderColor='rgba(37,99,235,.7)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(248,250,252,.3)'" data-i18n="hero_more">Mehr erfahren</button>
+          </div>
+        </div>
+
+        <!-- Right: quick form -->
+        <div class="hero-form-card">
+          <div class="hero-form-title" data-i18n="quick_form_title">Kostenlose Erstprüfung</div>
+          <div class="hero-form-sub"   data-i18n="quick_form_sub">Schildern Sie Ihren Fall — vertraulich &amp; unverbindlich.</div>
+          <div id="quick-success" class="hidden" style="text-align:center;padding:1.5rem 0">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" style="stroke:var(--gold);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto .75rem"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+            <div style="font-family:'Playfair Display',serif;font-size:1rem;color:#F8FAFC;font-weight:700;margin-bottom:.4rem" data-i18n="quick_success_title">Anfrage erhalten!</div>
+            <div style="font-size:.8rem;color:rgba(248,250,252,.62)" data-i18n="quick_success_text">Wir melden uns innerhalb von 4 Stunden.</div>
+            <button class="btn btn-sm" onclick="resetQuickForm()" style="margin-top:1rem;background:transparent;color:#F8FAFC;border:1.5px solid rgba(248,250,252,.25)" data-i18n="quick_reset">Neue Anfrage</button>
+          </div>
+          <form id="quick-form" onsubmit="submitQuickForm(event)">
+            <div class="form-row">
+              <div class="form-group"><label data-i18n="quick_firstname">Vorname *</label><input type="text" id="qf-first" required/></div>
+              <div class="form-group"><label data-i18n="quick_lastname">Nachname *</label><input type="text" id="qf-last" required/></div>
+            </div>
+            <div class="form-group"><label data-i18n="quick_email">E-Mail-Adresse *</label><input type="email" id="qf-email" required/></div>
+            <div class="form-group"><label data-i18n="quick_phone">Telefon (optional)</label><input type="tel" id="qf-phone"/></div>
+            <button type="submit" class="btn btn-accent btn-full" id="qf-submit">
+              <span data-i18n="quick_submit">Anfrage senden</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <div style="font-size:.72rem;color:rgba(248,250,252,.38);text-align:center;margin-top:.7rem" data-i18n="quick_disclaimer">Kostenlos · Vertraulich · Keine Weitergabe</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats bar -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="grid-4">
+        <div class="stat-item"><div class="stat-value">1.200+</div><div class="stat-label" data-i18n="stat_cases">Geprüfte Fälle</div></div>
+        <div class="stat-item"><div class="stat-value">18</div><div class="stat-label" data-i18n="stat_countries">Länder</div></div>
+        <div class="stat-item"><div class="stat-value">€4,3M+</div><div class="stat-label" data-i18n="stat_recovered">Wiederhergestellte Werte</div></div>
+        <div class="stat-item"><div class="stat-value">&lt; 4 h</div><div class="stat-label" data-i18n="stat_response">Ø Erstantwort</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services overview -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="text-center mb-4">
+        <span class="section-tag" data-i18n="services_tag">Spezialisierte Expertise</span>
+        <span class="accent-rule" style="margin:0 auto .8rem"></span>
+        <h2 class="section-title" data-i18n="services_title">Unsere Leistungsbereiche</h2>
+      </div>
+      <div class="grid-auto">
+        <div class="card card-hover" onclick="showPage('services')">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <h3 class="card-title" data-i18n="sv1_title">Wallet-Diebstahl</h3>
+          <p class="card-text" data-i18n="sv1_text">Forensische Analyse kompromittierter Wallets und On-Chain-Verfolgung gestohlener Vermögenswerte.</p>
+        </div>
+        <div class="card card-hover" onclick="showPage('services')">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <h3 class="card-title" data-i18n="sv2_title">Exchange-Betrug</h3>
+          <p class="card-text" data-i18n="sv2_text">Unterstützung bei betrügerischen Plattformen und Verlusten durch insolvent gegangene Exchanges.</p>
+        </div>
+        <div class="card card-hover" onclick="showPage('services')">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <h3 class="card-title" data-i18n="sv3_title">Phishing-Angriffe</h3>
+          <p class="card-text" data-i18n="sv3_text">Identifikation von Phishing-Infrastrukturen und forensische Analyse kompromittierter Systeme.</p>
+        </div>
+        <div class="card card-hover" onclick="showPage('services')">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <h3 class="card-title" data-i18n="sv4_title">Investmentbetrug</h3>
+          <p class="card-text" data-i18n="sv4_text">Aufdeckung von Ponzi-Schemata und Fake-Investment-Plattformen inklusive Rückverfolgung der Geldflüsse.</p>
+        </div>
+        <div class="card card-hover" onclick="showPage('services')">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3 class="card-title" data-i18n="sv5_title">Ransomware</h3>
+          <p class="card-text" data-i18n="sv5_text">Beurteilung der Optionen, Koordination mit Behörden und technische Analyse verschlüsselter Systeme.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust + Testimonials -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="grid-2" style="align-items:center">
+        <div>
+          <span class="section-tag" data-i18n="trust_tag">Warum uns Betroffene vertrauen</span>
+          <span class="accent-rule"></span>
+          <h2 class="section-title mb-4" data-i18n="trust_title">Vertrauen durch Kompetenz</h2>
+          <div style="display:flex;flex-direction:column;gap:1.75rem">
+            <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div><div class="trust-title" data-i18n="trust_1_title">Rechtliche &amp; Technische Expertise</div><div class="trust-text" data-i18n="trust_1_text">Unser interdisziplinäres Team vereint forensische Blockchain-Analysten, erfahrene Rechtsanwälte und Compliance-Spezialisten.</div></div></div>
+            <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="trust-title" data-i18n="trust_2_title">Nachgewiesene Erfolge</div><div class="trust-text" data-i18n="trust_2_text">Wir haben bereits in 18 Ländern erfolgreich Fälle begleitet – mit nachweisbaren Rückgewinnungserfolgen.</div></div></div>
+            <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div><div class="trust-title" data-i18n="trust_3_title">Absolute Vertraulichkeit</div><div class="trust-text" data-i18n="trust_3_text">Höchste Datenschutzstandards nach DSGVO. Ihre Informationen werden niemals ohne Ihre ausdrückliche Zustimmung weitergegeben.</div></div></div>
+            <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="trust-title" data-i18n="trust_4_title">Kostenlose Erstprüfung</div><div class="trust-text" data-i18n="trust_4_text">Jeder Fall wird zunächst kostenfrei geprüft. Wir beraten Sie ehrlich über Chancen und realistische Erwartungen.</div></div></div>
+          </div>
+        </div>
+        <div class="gap-col">
+          <div class="testimonial"><blockquote data-i18n="testimonial_1">"Nach dem Verlust von 3 BTC durch einen Phishing-Angriff hat uns Finora binnen 6 Wochen zu einem erfolgreichen Strafverfahren und teilweiser Rückgewinnung verholfen."</blockquote><div class="testimonial-name">M. K., Frankfurt</div><div class="testimonial-role">Privatanleger</div></div>
+          <div class="testimonial"><blockquote data-i18n="testimonial_2">"Das Team war zu jeder Zeit erreichbar, transparent und professionell. Ich kann Finora jedem empfehlen, der sich in einer ähnlichen Situation befindet."</blockquote><div class="testimonial-name">S. H., Wien</div><div class="testimonial-role">Unternehmerin</div></div>
+          <div class="testimonial"><blockquote data-i18n="testimonial_3">"Innerhalb von 48 Stunden hatte ich eine klare Einschätzung meines Falls. Sachlich, kompetent, ohne leere Versprechungen."</blockquote><div class="testimonial-name">T. B., Zürich</div><div class="testimonial-role">Freiberufler</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Band -->
+  <section class="cta-band">
+    <div class="container">
+      <span style="display:block;font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:.6rem" data-i18n="cta_tag">Jetzt handeln</span>
+      <h2 data-i18n="cta_title">Haben Sie Kryptowährungen verloren?</h2>
+      <p data-i18n="cta_sub">Jede Minute zählt. Je früher wir mit der Analyse beginnen, desto höher die Erfolgschancen.</p>
+      <button class="btn" style="background:#fff;color:var(--accent);font-weight:700" onclick="showPage('submit-case')" data-i18n="cta_btn">Fall jetzt einreichen</button>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+<!-- ════════════════════════════════════
+     ABOUT PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="page-header"><div class="container">
+    <span class="section-tag" data-i18n="about_tag">Die Vereinigung</span>
+    <h1 data-i18n="about_title">Über Finora</h1>
+  </div></div>
+  <section class="section section-alt"><div class="container">
+    <div class="grid-2 mb-4">
+      <div>
+        <span class="accent-rule"></span>
+        <h2 style="font-size:1.5rem;color:var(--text);margin-bottom:1rem;font-family:'Playfair Display',serif" data-i18n="about_mission">Unsere Mission</h2>
+        <p style="color:var(--text-muted);line-height:1.8" data-i18n="about_mission_text">Finora wurde gegründet, um Opfern von Krypto-Betrug eine kompetente, transparente und würdevolle Anlaufstelle zu bieten. Wir glauben, dass Betrugsopfer Zugang zu erstklassiger rechtlicher und technischer Expertise verdienen — unabhängig von der Komplexität ihres Falles.</p>
+      </div>
+      <div>
+        <span class="accent-rule"></span>
+        <h2 style="font-size:1.5rem;color:var(--text);margin-bottom:1rem;font-family:'Playfair Display',serif" data-i18n="about_vision">Unsere Vision</h2>
+        <p style="color:var(--text-muted);line-height:1.8" data-i18n="about_vision_text">Eine europäische Anlaufstelle, die als anerkannte Autorität im Bereich Krypto-Rückgewinnung gilt — vernetzt mit Strafverfolgungsbehörden, Regulatoren und internationalen Compliance-Netzwerken.</p>
+      </div>
+    </div>
+    <h2 class="section-title mb-3" data-i18n="about_values">Unsere Werte</h2>
+    <div class="grid-4 mb-4">
+      <div class="value-card"><div class="value-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg></div><h3 class="value-title" data-i18n="about_v1">Transparenz</h3><p class="value-text" data-i18n="about_v1t">Klare Kommunikation, keine leeren Versprechen.</p></div>
+      <div class="value-card"><div class="value-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3 class="value-title" data-i18n="about_v2">Integrität</h3><p class="value-text" data-i18n="about_v2t">Wir handeln ausschließlich im Interesse unserer Mandanten.</p></div>
+      <div class="value-card"><div class="value-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><h3 class="value-title" data-i18n="about_v3">Expertise</h3><p class="value-text" data-i18n="about_v3t">Forensik, Recht und Compliance auf Institutionsniveau.</p></div>
+      <div class="value-card"><div class="value-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><h3 class="value-title" data-i18n="about_v4">Diskretion</h3><p class="value-text" data-i18n="about_v4t">Absolute Vertraulichkeit ist für uns selbstverständlich.</p></div>
+    </div>
+    <h2 class="section-title mb-3" data-i18n="about_expertise">Unsere Expertise</h2>
+    <div class="grid-auto">
+      <div class="expertise-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="about_e1">Blockchain-Forensik &amp; Transaktionsanalyse</span></div>
+      <div class="expertise-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="about_e2">Kooperation mit europäischen Strafverfolgungsbehörden</span></div>
+      <div class="expertise-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="about_e3">DSGVO-konforme Datenverarbeitung</span></div>
+      <div class="expertise-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="about_e4">AMLD5/6 Compliance &amp; Regulierungsrecht</span></div>
+      <div class="expertise-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="about_e5">Internationale Rechtshilfe &amp; Vollstreckung</span></div>
+      <div class="expertise-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="about_e6">Opferschutz &amp; psychosoziale Begleitung</span></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ════════════════════════════════════
+     SERVICES PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-services">
+  <div class="page-header"><div class="container">
+    <span class="section-tag" data-i18n="svp_tag">Spezialisierte Hilfe</span>
+    <h1 data-i18n="svp_title">Unsere Leistungen</h1>
+  </div></div>
+  <section class="section section-light"><div class="container">
+    <div class="grid-auto">
+      <div class="card card-hover" onclick="showPage('submit-case')"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><h3 class="card-title" data-i18n="sv1_title">Wallet-Diebstahl</h3><p class="card-text" data-i18n="sv1_full">Forensische Analyse kompromittierter Wallets, Nachverfolgung gestohlener Vermögenswerte on-chain und Koordination mit Exchanges zur Kontosperrung. Wir sichern Beweise und koordinieren mit den zuständigen Behörden.</p><button class="btn btn-accent btn-sm mt-3" data-i18n="sv_cta">Fall einreichen →</button></div>
+      <div class="card card-hover" onclick="showPage('submit-case')"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><h3 class="card-title" data-i18n="sv2_title">Exchange-Betrug</h3><p class="card-text" data-i18n="sv2_full">Unterstützung bei unrechtmäßigen Kontosperrungen, betrügerischen Plattformen und Verlusten durch insolvent gegangene Exchanges. Wir kennen die rechtlichen Wege zur Rückforderung.</p><button class="btn btn-accent btn-sm mt-3" data-i18n="sv_cta">Fall einreichen →</button></div>
+      <div class="card card-hover" onclick="showPage('submit-case')"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><h3 class="card-title" data-i18n="sv3_title">Phishing-Angriffe</h3><p class="card-text" data-i18n="sv3_full">Identifikation von Phishing-Infrastrukturen, forensische Analyse kompromittierter Systeme und vollständige Unterstützung bei der Strafanzeige sowie Beweissicherung.</p><button class="btn btn-accent btn-sm mt-3" data-i18n="sv_cta">Fall einreichen →</button></div>
+      <div class="card card-hover" onclick="showPage('submit-case')"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><h3 class="card-title" data-i18n="sv4_title">Investmentbetrug</h3><p class="card-text" data-i18n="sv4_full">Aufdeckung von Ponzi-Schemata, Fake-Investment-Plattformen und Pig-Butchering-Scams inklusive vollständiger Rückverfolgung der Geldflüsse für rechtliche Schritte.</p><button class="btn btn-accent btn-sm mt-3" data-i18n="sv_cta">Fall einreichen →</button></div>
+      <div class="card card-hover" onclick="showPage('submit-case')"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3 class="card-title" data-i18n="sv5_title">Ransomware</h3><p class="card-text" data-i18n="sv5_full">Beurteilung der Zahlungsoptionen, Koordination mit Strafverfolgungsbehörden und technische Analyse verschlüsselter Systeme. Wir helfen Ihnen, die beste Entscheidung zu treffen.</p><button class="btn btn-accent btn-sm mt-3" data-i18n="sv_cta">Fall einreichen →</button></div>
+      <div class="card card-hover" onclick="showPage('submit-case')"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-accent"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><h3 class="card-title" data-i18n="sv7_title">Allgemeine Beratung</h3><p class="card-text" data-i18n="sv7_full">Präventionsberatung, Sicherheits-Audits für Privatpersonen und Unternehmen sowie Schulungen im sicheren Umgang mit Kryptowährungen und digitalen Assets.</p><button class="btn btn-accent btn-sm mt-3" data-i18n="sv_cta">Fall einreichen →</button></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ════════════════════════════════════
+     CONTACT PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="page-header"><div class="container">
+    <span class="section-tag" data-i18n="contact_tag">Wir sind für Sie da</span>
+    <h1 data-i18n="contact_title">Kontakt aufnehmen</h1>
+  </div></div>
+  <section class="section section-light"><div class="container">
+    <div class="grid-2" style="align-items:start">
+      <div class="card">
+        <div id="contact-success" class="success-box hidden">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto"><polyline points="20 6 9 17 4 12"/></svg>
+          <h3 data-i18n="contact_success_title">Nachricht erfolgreich gesendet</h3>
+          <p data-i18n="contact_success_text">Wir melden uns innerhalb von 4 Stunden per E-Mail bei Ihnen.</p>
+        </div>
+        <form id="contact-form" onsubmit="submitContact(event)">
+          <div class="form-row">
+            <div class="form-group"><label data-i18n="contact_name">Vollständiger Name *</label><input type="text" id="c-name" required/></div>
+            <div class="form-group"><label data-i18n="contact_email">E-Mail-Adresse *</label><input type="email" id="c-email" required/></div>
+          </div>
+          <div class="form-group"><label data-i18n="contact_subject">Betreff (optional)</label><input type="text" id="c-subject"/></div>
+          <div class="form-group"><label data-i18n="contact_message">Ihre Nachricht *</label><textarea id="c-message" rows="6" required></textarea></div>
+          <button type="submit" class="btn btn-accent btn-full" id="contact-submit"><span data-i18n="contact_send">Nachricht senden</span></button>
+        </form>
+      </div>
+      <div>
+        <div class="card mb-3">
+          <h3 style="font-size:1rem;color:var(--text);margin-bottom:.9rem;font-family:'Playfair Display',serif;font-weight:700" data-i18n="contact_info_title">Kontaktinformationen</h3>
+          <div class="footer-contact-item"><svg class="footer-contact-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--accent)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span style="color:var(--text-muted);font-size:.8rem" data-i18n="contact_addr">Bahnhofstrasse 100, 8001 Zürich, Schweiz</span></div>
+          <div class="footer-contact-item"><svg class="footer-contact-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--accent)"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span style="color:var(--text-muted);font-size:.8rem">info@finora.eu</span></div>
+          <div class="footer-contact-item"><svg class="footer-contact-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--accent)"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.12 1.18 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.29 6.29l1.68-1.68a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span style="color:var(--text-muted);font-size:.8rem">+41 44 000 00 00</span></div>
+          <div class="footer-contact-item"><svg class="footer-contact-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--accent)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span style="color:var(--text-muted);font-size:.8rem" data-i18n="contact_hours">Mo–Fr: 08:00–18:00 Uhr</span></div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:1rem;color:var(--text);margin-bottom:.75rem;font-family:'Playfair Display',serif;font-weight:700" data-i18n="faq_title">Häufige Fragen</h3>
+          <div class="accordion-item"><button class="accordion-btn" onclick="toggleFaq(this)"><span data-i18n="faq1_q">Ist die Erstprüfung wirklich kostenlos?</span><svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></button><div class="accordion-body"><span data-i18n="faq1_a">Ja, absolut. Wir prüfen Ihren Fall kostenfrei und informieren Sie ehrlich über die Erfolgsaussichten.</span></div></div>
+          <div class="accordion-item"><button class="accordion-btn" onclick="toggleFaq(this)"><span data-i18n="faq2_q">Wie lange dauert ein typisches Verfahren?</span><svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></button><div class="accordion-body"><span data-i18n="faq2_a">Einfachere Fälle können in wenigen Wochen abgeschlossen werden; komplexe internationale Fälle können mehrere Monate dauern.</span></div></div>
+          <div class="accordion-item"><button class="accordion-btn" onclick="toggleFaq(this)"><span data-i18n="faq3_q">In welchen Ländern können Sie helfen?</span><svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></button><div class="accordion-body"><span data-i18n="faq3_a">Wir sind in 18 Ländern aktiv, mit Schwerpunkt auf Deutschland, Österreich, der Schweiz und anderen EU-Mitgliedstaaten.</span></div></div>
+          <div class="accordion-item"><button class="accordion-btn" onclick="toggleFaq(this)"><span data-i18n="faq4_q">Welche Dokumente benötige ich?</span><svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></button><div class="accordion-body"><span data-i18n="faq4_a">Idealerweise: Transaktionsnachweise, E-Mail-Korrespondenz, Kontoauszüge und alle relevanten Screenshots.</span></div></div>
+          <div class="accordion-item"><button class="accordion-btn" onclick="toggleFaq(this)"><span data-i18n="faq5_q">Arbeiten Sie mit der Polizei zusammen?</span><svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></button><div class="accordion-body"><span data-i18n="faq5_a">Ja. Wir kooperieren regelmäßig mit Strafverfolgungsbehörden in mehreren Ländern.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ════════════════════════════════════
+     SUBMIT CASE PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-submit-case">
+  <div class="page-header"><div class="container">
+    <span class="section-tag" data-i18n="case_tag">Vertraulich · Kostenlos · Unverbindlich</span>
+    <h1 data-i18n="case_title">Fall einreichen</h1>
+  </div></div>
+  <section class="section section-light"><div class="container" style="max-width:700px">
+    <div class="steps" id="case-steps">
+      <div class="step active" id="si-1"><div class="step-dot">1</div><div class="step-label" data-i18n="case_step1">Persönliche Daten</div></div>
+      <div class="step"        id="si-2"><div class="step-dot">2</div><div class="step-label" data-i18n="case_step2">Falldetails</div></div>
+      <div class="step"        id="si-3"><div class="step-dot">3</div><div class="step-label" data-i18n="case_step3">Prüfen &amp; Senden</div></div>
+    </div>
+    <div class="card" id="cs1">
+      <h2 style="font-size:1.25rem;color:var(--text);margin-bottom:1.6rem;font-family:'Playfair Display',serif;font-weight:700" data-i18n="case_step1">Persönliche Daten</h2>
+      <div class="form-group"><label data-i18n="case_name">Vollständiger Name *</label><input type="text" id="f-name"/></div>
+      <div class="form-group"><label data-i18n="case_email">E-Mail-Adresse *</label><input type="email" id="f-email"/></div>
+      <div class="form-group"><label data-i18n="case_phone">Telefon (optional)</label><input type="tel" id="f-phone"/></div>
+      <div id="e1" class="error-msg hidden" data-i18n="err_required">Bitte füllen Sie alle Pflichtfelder aus.</div>
+      <button class="btn btn-accent btn-full" onclick="caseNext(1)"><span data-i18n="case_next">Weiter</span> →</button>
+    </div>
+    <div class="card hidden" id="cs2">
+      <h2 style="font-size:1.25rem;color:var(--text);margin-bottom:1.6rem;font-family:'Playfair Display',serif;font-weight:700" data-i18n="case_step2">Falldetails</h2>
+      <div class="form-group"><label data-i18n="case_type">Art des Vorfalls *</label>
+        <select id="f-type">
+          <option value="">— bitte wählen —</option>
+          <option value="wallet_theft"    data-i18n="case_t_wallet">Wallet-Diebstahl</option>
+          <option value="exchange_scam"   data-i18n="case_t_exchange">Exchange-Betrug</option>
+          <option value="phishing"        data-i18n="case_t_phishing">Phishing-Angriff</option>
+          <option value="investment_scam" data-i18n="case_t_invest">Investmentbetrug</option>
+          <option value="ransomware"      data-i18n="case_t_ransom">Ransomware</option>
+          <option value="other"           data-i18n="case_t_other">Sonstiges</option>
+        </select>
+      </div>
+      <div class="form-group"><label data-i18n="case_desc">Beschreibung des Vorfalls *</label><textarea id="f-desc" rows="5" placeholder="Bitte beschreiben Sie so detailliert wie möglich, was passiert ist…"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label data-i18n="case_loss">Geschätzter Verlust (EUR) *</label><input type="number" id="f-loss" min="0"/></div>
+        <div class="form-group"><label data-i18n="case_coins">Kryptowährungen</label><input type="text" id="f-coins" placeholder="BTC, ETH…"/></div>
+      </div>
+      <div class="form-group"><label data-i18n="case_date">Datum des Vorfalls (ca.)</label><input type="date" id="f-date"/></div>
+      <div class="form-group"><div class="checkbox-wrap"><input type="checkbox" id="f-consent"/><label for="f-consent" class="checkbox-label" data-i18n="case_consent">Ich stimme zu, dass Finora meine Angaben zur Prüfung meines Falles vertraulich verarbeitet. Meine Daten werden nicht ohne meine Zustimmung an Dritte weitergegeben.</label></div></div>
+      <div id="e2" class="error-msg hidden" data-i18n="err_required2">Bitte füllen Sie alle Pflichtfelder aus und stimmen Sie der Einwilligung zu.</div>
+      <div style="display:flex;gap:.85rem">
+        <button class="btn btn-ghost" onclick="caseBack(2)" style="min-width:100px"><span data-i18n="case_back">← Zurück</span></button>
+        <button class="btn btn-accent" style="flex:1;justify-content:center" onclick="caseNext(2)"><span data-i18n="case_next">Weiter</span> →</button>
+      </div>
+    </div>
+    <div class="card hidden" id="cs3">
+      <h2 style="font-size:1.25rem;color:var(--text);margin-bottom:1.2rem;font-family:'Playfair Display',serif;font-weight:700" data-i18n="case_summary">Zusammenfassung</h2>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:1.4rem;margin-bottom:1.6rem" id="case-review"></div>
+      <div style="display:flex;gap:.85rem">
+        <button class="btn btn-ghost" onclick="caseBack(3)" style="min-width:100px"><span data-i18n="case_back">← Zurück</span></button>
+        <button class="btn btn-accent" style="flex:1;justify-content:center" onclick="submitCase()"><span data-i18n="case_submit">Fall einreichen</span></button>
+      </div>
+    </div>
+    <div class="success-box hidden" id="case-success">
+      <svg width="50" height="50" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto 1rem"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+      <h3 data-i18n="case_success_title">Fall erfolgreich eingereicht!</h3>
+      <div class="success-ref" id="case-ref"></div>
+      <p data-i18n="case_success_text">Wir haben Ihren Fall registriert und melden uns innerhalb von 4 Stunden per E-Mail.</p>
+    </div>
+  </div></section>
+</div>
+
+<!-- ════════════════════════════════════
+     IMPRINT
+════════════════════════════════════ -->
+<div class="page" id="page-imprint">
+  <div class="page-header"><div class="container"><h1 data-i18n="imprint_title">Impressum</h1></div></div>
+  <section class="section section-alt"><div class="container"><div class="prose">
+    <h2>Angaben gemäß § 5 TMG</h2>
+    <p><strong>Finora GmbH – Asset Recovery &amp; Digital Forensics</strong><br/>Bahnhofstrasse 100<br/>8001 Zürich, Schweiz</p>
+    <h2>Kontakt</h2>
+    <p>Telefon: +41 44 000 00 00<br/>E-Mail: info@finora.eu</p>
+    <h2>Handelsregister</h2>
+    <p>Eingetragene Gesellschaft nach Schweizer Recht. Handelsregisternummer: [Registernummer]</p>
+    <h2>Haftungsausschluss</h2>
+    <p>Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
+  </div></div></section>
+</div>
+
+<!-- ════════════════════════════════════
+     PRIVACY
+════════════════════════════════════ -->
+<div class="page" id="page-privacy">
+  <div class="page-header"><div class="container"><h1 data-i18n="privacy_title">Datenschutzerklärung</h1></div></div>
+  <section class="section section-alt"><div class="container"><div class="prose">
+    <h2>1. Datenschutz auf einen Blick</h2>
+    <p>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst und behandeln diese vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
+    <h2>2. Verantwortliche Stelle</h2>
+    <p><strong>Finora GmbH – Asset Recovery &amp; Digital Forensics</strong><br/>Bahnhofstrasse 100, 8001 Zürich, Schweiz<br/>E-Mail: datenschutz@finora.eu</p>
+    <h2>3. Erhebung personenbezogener Daten</h2>
+    <p>Wir erheben und verarbeiten personenbezogene Daten nur, soweit dies für die Erfüllung unserer Dienstleistungen erforderlich ist.</p>
+    <h2>4. Ihre Rechte (DSGVO)</h2>
+    <p>Sie haben das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18) und Datenübertragbarkeit (Art. 20).</p>
+    <h2>5. Cookies</h2>
+    <p>Diese Website verwendet keine Tracking-Cookies oder Analyse-Tools von Drittanbietern.</p>
+    <h2>6. Datensicherheit</h2>
+    <p>Wir setzen technische und organisatorische Sicherheitsmaßnahmen ein, um Ihre Daten gegen unbefugten Zugriff zu schützen.</p>
+  </div></div></section>
+</div>
+
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Finora</div>
+        <p class="footer-tagline" data-i18n="footer_tagline">Die vertrauenswürdige Anlaufstelle für Opfer von Kryptowährungs-Betrug in Deutschland, Österreich und der Schweiz.</p>
+        <div style="display:flex;gap:.45rem;flex-wrap:wrap">
+          <span style="display:inline-flex;align-items:center;background:rgba(37,99,235,.18);color:#93C5FD;font-size:.7rem;font-weight:700;padding:.23rem .58rem;border-radius:3px;letter-spacing:.05em;text-transform:uppercase">DSGVO</span>
+          <span style="display:inline-flex;align-items:center;background:rgba(212,175,55,.15);color:var(--gold);font-size:.7rem;font-weight:700;padding:.23rem .58rem;border-radius:3px;letter-spacing:.05em;text-transform:uppercase">ISO 27001</span>
+          <span style="display:inline-flex;align-items:center;background:rgba(37,99,235,.18);color:#93C5FD;font-size:.7rem;font-weight:700;padding:.23rem .58rem;border-radius:3px;letter-spacing:.05em;text-transform:uppercase">AMLD6</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title" data-i18n="footer_services">Leistungen</div>
+        <button class="footer-link" onclick="showPage('services')" data-i18n="sv1_title">Wallet-Diebstahl</button>
+        <button class="footer-link" onclick="showPage('services')" data-i18n="sv2_title">Exchange-Betrug</button>
+        <button class="footer-link" onclick="showPage('services')" data-i18n="sv3_title">Phishing-Angriffe</button>
+        <button class="footer-link" onclick="showPage('services')" data-i18n="sv4_title">Investmentbetrug</button>
+        <button class="footer-link" onclick="showPage('services')" data-i18n="sv5_title">Ransomware</button>
+      </div>
+      <div>
+        <div class="footer-col-title" data-i18n="footer_legal">Rechtliches</div>
+        <button class="footer-link" onclick="showPage('imprint')"  data-i18n="nav_imprint">Impressum</button>
+        <button class="footer-link" onclick="showPage('privacy')"  data-i18n="nav_privacy">Datenschutz</button>
+        <button class="footer-link" onclick="showPage('contact')"  data-i18n="nav_contact">Kontakt</button>
+      </div>
+      <div>
+        <div class="footer-col-title">Kontakt</div>
+        <div class="footer-contact-item"><svg class="footer-contact-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--gold)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="footer-contact-text" data-i18n="contact_addr">Bahnhofstrasse 100, 8001 Zürich</span></div>
+        <div class="footer-contact-item"><svg class="footer-contact-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--gold)"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="footer-contact-text">info@finora.eu</span></div>
+        <div class="footer-contact-item"><svg class="footer-contact-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--gold)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="footer-contact-text" data-i18n="contact_hours">Mo–Fr: 08:00–18:00 Uhr</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="footer_rights">© 2024 Finora GmbH. Alle Rechte vorbehalten.</div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+/* ─── TRANSLATIONS ─── */
+var T = {
+  de:{
+    nav_home:'Startseite',nav_about:'Über uns',nav_services:'Leistungen',nav_contact:'Kontakt',
+    nav_case:'Fall einreichen',nav_imprint:'Impressum',nav_privacy:'Datenschutz',
+    hero_tag:'Finora — Vertrauenswürdig. Kompetent. Diskret.',
+    hero_title:'Ihre vertrauenswürdige Instanz für Krypto-Rückgewinnung',
+    hero_sub:'Wir unterstützen Opfer von Kryptowährungs-Betrug, Wallet-Diebstahl, Phishing-Angriffen und Ransomware mit rechtlicher und technischer Expertise.',
+    hero_cta:'Fall kostenlos prüfen lassen',hero_more:'Mehr erfahren',
+    quick_form_title:'Kostenlose Erstprüfung',
+    quick_form_sub:'Schildern Sie Ihren Fall — vertraulich &amp; unverbindlich.',
+    quick_firstname:'Vorname *',quick_lastname:'Nachname *',quick_email:'E-Mail-Adresse *',quick_phone:'Telefon (optional)',
+    quick_submit:'Anfrage senden',quick_disclaimer:'Kostenlos · Vertraulich · Keine Weitergabe',
+    quick_success_title:'Anfrage erhalten!',quick_success_text:'Wir melden uns innerhalb von 4 Stunden.',quick_reset:'Neue Anfrage',
+    stat_cases:'Geprüfte Fälle',stat_countries:'Länder',stat_recovered:'Wiederhergestellte Werte',stat_response:'Ø Erstantwort',
+    services_tag:'Spezialisierte Expertise',services_title:'Unsere Leistungsbereiche',
+    sv1_title:'Wallet-Diebstahl',sv1_text:'Forensische Analyse kompromittierter Wallets und On-Chain-Verfolgung gestohlener Vermögenswerte.',sv1_full:'Forensische Analyse kompromittierter Wallets, Nachverfolgung gestohlener Vermögenswerte on-chain und Koordination mit Exchanges zur Kontosperrung. Wir sichern Beweise und koordinieren mit den zuständigen Behörden.',
+    sv2_title:'Exchange-Betrug',sv2_text:'Unterstützung bei betrügerischen Plattformen und Verlusten durch insolvent gegangene Exchanges.',sv2_full:'Unterstützung bei unrechtmäßigen Kontosperrungen, betrügerischen Plattformen und Verlusten durch insolvent gegangene Exchanges. Wir kennen die rechtlichen Wege zur Rückforderung.',
+    sv3_title:'Phishing-Angriffe',sv3_text:'Identifikation von Phishing-Infrastrukturen und forensische Analyse kompromittierter Systeme.',sv3_full:'Identifikation von Phishing-Infrastrukturen, forensische Analyse kompromittierter Systeme und vollständige Unterstützung bei der Strafanzeige sowie Beweissicherung.',
+    sv4_title:'Investmentbetrug',sv4_text:'Aufdeckung von Ponzi-Schemata und Fake-Investment-Plattformen inklusive Rückverfolgung der Geldflüsse.',sv4_full:'Aufdeckung von Ponzi-Schemata, Fake-Investment-Plattformen und Pig-Butchering-Scams inklusive vollständiger Rückverfolgung der Geldflüsse für rechtliche Schritte.',
+    sv5_title:'Ransomware',sv5_text:'Beurteilung der Optionen, Koordination mit Behörden und technische Analyse verschlüsselter Systeme.',sv5_full:'Beurteilung der Zahlungsoptionen, Koordination mit Strafverfolgungsbehörden und technische Analyse verschlüsselter Systeme. Wir helfen Ihnen, die beste Entscheidung zu treffen.',
+    sv7_title:'Allgemeine Beratung',sv7_text:'Präventionsberatung und Sicherheits-Audits für Privatpersonen und Unternehmen.',sv7_full:'Präventionsberatung, Sicherheits-Audits für Privatpersonen und Unternehmen sowie Schulungen im sicheren Umgang mit Kryptowährungen und digitalen Assets.',
+    sv_cta:'Fall einreichen →',
+    trust_tag:'Warum uns Betroffene vertrauen',trust_title:'Vertrauen durch Kompetenz',
+    trust_1_title:'Rechtliche & Technische Expertise',trust_1_text:'Unser interdisziplinäres Team vereint forensische Blockchain-Analysten, erfahrene Rechtsanwälte und Compliance-Spezialisten.',
+    trust_2_title:'Nachgewiesene Erfolge',trust_2_text:'Wir haben bereits in 18 Ländern erfolgreich Fälle begleitet – mit nachweisbaren Rückgewinnungserfolgen.',
+    trust_3_title:'Absolute Vertraulichkeit',trust_3_text:'Höchste Datenschutzstandards nach DSGVO. Ihre Informationen werden niemals ohne Ihre ausdrückliche Zustimmung weitergegeben.',
+    trust_4_title:'Kostenlose Erstprüfung',trust_4_text:'Jeder Fall wird zunächst kostenfrei geprüft. Wir beraten Sie ehrlich über Chancen und realistische Erwartungen.',
+    testimonial_1:'"Nach dem Verlust von 3 BTC durch einen Phishing-Angriff hat uns Finora binnen 6 Wochen zu einem erfolgreichen Strafverfahren und teilweiser Rückgewinnung verholfen."',
+    testimonial_2:'"Das Team war zu jeder Zeit erreichbar, transparent und professionell. Ich kann Finora jedem empfehlen, der sich in einer ähnlichen Situation befindet."',
+    testimonial_3:'"Innerhalb von 48 Stunden hatte ich eine klare Einschätzung meines Falls. Sachlich, kompetent, ohne leere Versprechungen."',
+    cta_tag:'Jetzt handeln',cta_title:'Haben Sie Kryptowährungen verloren?',
+    cta_sub:'Jede Minute zählt. Je früher wir mit der Analyse beginnen, desto höher die Erfolgschancen.',cta_btn:'Fall jetzt einreichen',
+    about_tag:'Das Unternehmen',about_title:'Über Finora',
+    about_mission:'Unsere Mission',about_mission_text:'Finora wurde gegründet, um Opfern von Krypto-Betrug eine kompetente, transparente und würdevolle Anlaufstelle zu bieten. Wir glauben, dass Betrugsopfer Zugang zu erstklassiger rechtlicher und technischer Expertise verdienen — unabhängig von der Komplexität ihres Falles.',
+    about_vision:'Unsere Vision',about_vision_text:'Eine europäische Anlaufstelle, die als anerkannte Autorität im Bereich Krypto-Rückgewinnung gilt — vernetzt mit Strafverfolgungsbehörden, Regulatoren und internationalen Compliance-Netzwerken.',
+    about_values:'Unsere Werte',about_v1:'Transparenz',about_v1t:'Klare Kommunikation, keine leeren Versprechen.',about_v2:'Integrität',about_v2t:'Wir handeln ausschließlich im Interesse unserer Mandanten.',about_v3:'Expertise',about_v3t:'Forensik, Recht und Compliance auf Institutionsniveau.',about_v4:'Diskretion',about_v4t:'Absolute Vertraulichkeit ist für uns selbstverständlich.',
+    about_expertise:'Unsere Expertise',about_e1:'Blockchain-Forensik & Transaktionsanalyse',about_e2:'Kooperation mit europäischen Strafverfolgungsbehörden',about_e3:'DSGVO-konforme Datenverarbeitung',about_e4:'AMLD5/6 Compliance & Regulierungsrecht',about_e5:'Internationale Rechtshilfe & Vollstreckung',about_e6:'Opferschutz & psychosoziale Begleitung',
+    svp_tag:'Spezialisierte Hilfe',svp_title:'Unsere Leistungen',
+    contact_tag:'Wir sind für Sie da',contact_title:'Kontakt aufnehmen',
+    contact_name:'Vollständiger Name *',contact_email:'E-Mail-Adresse *',contact_subject:'Betreff (optional)',contact_message:'Ihre Nachricht *',contact_send:'Nachricht senden',
+    contact_success_title:'Nachricht erfolgreich gesendet',contact_success_text:'Wir melden uns innerhalb von 4 Stunden per E-Mail bei Ihnen.',
+    contact_info_title:'Kontaktinformationen',contact_addr:'Bahnhofstrasse 100, 8001 Zürich, Schweiz',contact_hours:'Mo–Fr: 08:00–18:00 Uhr',
+    faq_title:'Häufige Fragen',
+    faq1_q:'Ist die Erstprüfung wirklich kostenlos?',faq1_a:'Ja, absolut. Wir prüfen Ihren Fall kostenfrei und informieren Sie ehrlich über die Erfolgsaussichten.',
+    faq2_q:'Wie lange dauert ein typisches Verfahren?',faq2_a:'Einfachere Fälle können in wenigen Wochen abgeschlossen werden; komplexe internationale Fälle können mehrere Monate dauern.',
+    faq3_q:'In welchen Ländern können Sie helfen?',faq3_a:'Wir sind in 18 Ländern aktiv, mit Schwerpunkt auf Deutschland, Österreich, der Schweiz und anderen EU-Mitgliedstaaten.',
+    faq4_q:'Welche Dokumente benötige ich?',faq4_a:'Idealerweise: Transaktionsnachweise, E-Mail-Korrespondenz, Kontoauszüge und alle relevanten Screenshots.',
+    faq5_q:'Arbeiten Sie mit der Polizei zusammen?',faq5_a:'Ja. Wir kooperieren regelmäßig mit Strafverfolgungsbehörden in mehreren Ländern.',
+    case_tag:'Vertraulich · Kostenlos · Unverbindlich',case_title:'Fall einreichen',
+    case_step1:'Persönliche Daten',case_step2:'Falldetails',case_step3:'Prüfen & Senden',
+    case_name:'Vollständiger Name *',case_email:'E-Mail-Adresse *',case_phone:'Telefon (optional)',case_type:'Art des Vorfalls *',case_desc:'Beschreibung des Vorfalls *',case_loss:'Geschätzter Verlust (EUR) *',case_coins:'Kryptowährungen',case_date:'Datum des Vorfalls (ca.)',
+    case_consent:'Ich stimme zu, dass Finora meine Angaben zur Prüfung meines Falles vertraulich verarbeitet. Meine Daten werden nicht ohne meine Zustimmung an Dritte weitergegeben.',
+    case_next:'Weiter',case_back:'← Zurück',case_submit:'Fall einreichen',case_summary:'Zusammenfassung',
+    case_t_wallet:'Wallet-Diebstahl',case_t_exchange:'Exchange-Betrug',case_t_phishing:'Phishing-Angriff',case_t_invest:'Investmentbetrug',case_t_ransom:'Ransomware',case_t_other:'Sonstiges',
+    err_required:'Bitte füllen Sie alle Pflichtfelder aus.',err_required2:'Bitte füllen Sie alle Pflichtfelder aus und stimmen Sie der Einwilligung zu.',
+    case_success_title:'Fall erfolgreich eingereicht!',case_success_text:'Wir haben Ihren Fall registriert und melden uns innerhalb von 4 Stunden per E-Mail.',
+    imprint_title:'Impressum',privacy_title:'Datenschutzerklärung',
+    footer_tagline:'Die vertrauenswürdige Anlaufstelle für Opfer von Kryptowährungs-Betrug in Deutschland, Österreich und der Schweiz.',
+    footer_services:'Leistungen',footer_legal:'Rechtliches',
+    footer_rights:'© 2024 Finora GmbH. Alle Rechte vorbehalten.'
+  },
+  en:{
+    nav_home:'Home',nav_about:'About',nav_services:'Services',nav_contact:'Contact',
+    nav_case:'Submit Case',nav_imprint:'Imprint',nav_privacy:'Privacy',
+    hero_tag:'Finora — Trusted. Competent. Discreet.',
+    hero_title:'Your Trusted Authority for Crypto Recovery',
+    hero_sub:'We support victims of cryptocurrency fraud, wallet theft, phishing attacks, and ransomware with legal and technical expertise.',
+    hero_cta:'Check Your Case for Free',hero_more:'Learn More',
+    quick_form_title:'Free Initial Assessment',quick_form_sub:'Describe your case — confidential &amp; non-binding.',
+    quick_firstname:'First Name *',quick_lastname:'Last Name *',quick_email:'Email Address *',quick_phone:'Phone (optional)',
+    quick_submit:'Send Request',quick_disclaimer:'Free · Confidential · No Data Sharing',
+    quick_success_title:'Request Received!',quick_success_text:'We will respond within 4 hours.',quick_reset:'New Request',
+    stat_cases:'Cases Reviewed',stat_countries:'Countries',stat_recovered:'Assets Recovered',stat_response:'Avg. First Response',
+    services_tag:'Specialized Expertise',services_title:'Our Service Areas',
+    sv1_title:'Wallet Theft',sv1_text:'Forensic analysis of compromised wallets and on-chain tracing of stolen assets.',sv1_full:'Forensic analysis of compromised wallets, on-chain tracing of stolen assets, and coordination with exchanges for account freezing. We preserve evidence and coordinate with authorities.',
+    sv2_title:'Exchange Fraud',sv2_text:'Support for fraudulent platforms and losses from insolvent exchanges.',sv2_full:'Support for unlawful account freezes, fraudulent platforms, and losses from insolvent exchanges. We know the legal avenues for recovery.',
+    sv3_title:'Phishing Attacks',sv3_text:'Identification of phishing infrastructure and forensic analysis of compromised systems.',sv3_full:'Identification of phishing infrastructure, forensic analysis of compromised systems, and full support filing criminal charges and preserving evidence.',
+    sv4_title:'Investment Fraud',sv4_text:'Exposing Ponzi schemes and fake investment platforms with full fund tracing.',sv4_full:'Exposing Ponzi schemes, fake investment platforms, and pig butchering scams with complete fund flow tracing for legal action.',
+    sv5_title:'Ransomware',sv5_text:'Assessing options, coordinating with authorities, and technical analysis of encrypted systems.',sv5_full:'Assessing payment options, coordinating with law enforcement, and technical analysis of encrypted systems. We help you make the best decision.',
+    sv7_title:'General Consulting',sv7_text:'Prevention consulting and security audits for individuals and businesses.',sv7_full:'Prevention consulting, security audits for individuals and businesses, and training in safe cryptocurrency and digital asset use.',
+    sv_cta:'Submit Case →',
+    trust_tag:'Why Victims Trust Us',trust_title:'Trust Through Competence',
+    trust_1_title:'Legal & Technical Expertise',trust_1_text:'Our interdisciplinary team combines forensic blockchain analysts, experienced lawyers, and compliance specialists.',
+    trust_2_title:'Proven Track Record',trust_2_text:'We have successfully handled cases in 18 countries with demonstrable recovery results.',
+    trust_3_title:'Absolute Confidentiality',trust_3_text:'Highest data protection standards under GDPR. Your information is never shared without your explicit consent.',
+    trust_4_title:'Free Initial Assessment',trust_4_text:'Every case is first reviewed free of charge. We advise you honestly about chances and realistic expectations.',
+    testimonial_1:'"After losing 3 BTC through a phishing attack, Finora helped us achieve a successful prosecution and partial recovery within 6 weeks."',
+    testimonial_2:'"The team was reachable at all times, transparent, and professional. I recommend Finora to anyone in a similar situation."',
+    testimonial_3:'"Within 48 hours I had a clear assessment of my case. Factual, competent, without empty promises."',
+    cta_tag:'Act Now',cta_title:'Have You Lost Cryptocurrency?',
+    cta_sub:'Every minute counts. The sooner we begin the analysis, the higher the chances of success.',cta_btn:'Submit Case Now',
+    about_tag:'The Company',about_title:'About Finora',
+    about_mission:'Our Mission',about_mission_text:'Finora was founded to provide victims of crypto fraud with a competent, transparent, and dignified point of contact. We believe fraud victims deserve access to top-level legal and technical expertise — regardless of case complexity.',
+    about_vision:'Our Vision',about_vision_text:'A European contact point recognized as an authority in crypto recovery, networked with law enforcement agencies, regulators, and international compliance networks.',
+    about_values:'Our Values',about_v1:'Transparency',about_v1t:'Clear communication, no empty promises.',about_v2:'Integrity',about_v2t:'We act exclusively in the interest of our clients.',about_v3:'Expertise',about_v3t:'Forensics, law, and compliance at institutional level.',about_v4:'Discretion',about_v4t:'Absolute confidentiality is our standard.',
+    about_expertise:'Our Expertise',about_e1:'Blockchain Forensics & Transaction Analysis',about_e2:'Cooperation with European Law Enforcement Agencies',about_e3:'GDPR-compliant Data Processing',about_e4:'AMLD5/6 Compliance & Regulatory Law',about_e5:'International Legal Assistance & Enforcement',about_e6:'Victim Protection & Psychosocial Support',
+    svp_tag:'Specialized Help',svp_title:'Our Services',
+    contact_tag:'We Are Here for You',contact_title:'Get in Touch',
+    contact_name:'Full Name *',contact_email:'Email Address *',contact_subject:'Subject (optional)',contact_message:'Your Message *',contact_send:'Send Message',
+    contact_success_title:'Message Successfully Sent',contact_success_text:'We will respond by email within 4 hours.',
+    contact_info_title:'Contact Information',contact_addr:'Bahnhofstrasse 100, 8001 Zurich, Switzerland',contact_hours:'Mon–Fri: 08:00–18:00',
+    faq_title:'Frequently Asked Questions',
+    faq1_q:'Is the initial assessment really free?',faq1_a:'Yes, absolutely. We review your case at no cost and advise you honestly on the prospects.',
+    faq2_q:'How long does a typical process take?',faq2_a:'Simpler cases can be resolved in a few weeks; complex international cases may take several months.',
+    faq3_q:'In which countries can you help?',faq3_a:'We operate in 18 countries, with a focus on Germany, Austria, Switzerland, and other EU member states.',
+    faq4_q:'What documents do I need?',faq4_a:'Ideally: transaction records, email correspondence, bank statements, and all relevant screenshots.',
+    faq5_q:'Do you work with the police?',faq5_a:'Yes. We regularly cooperate with law enforcement agencies in multiple countries.',
+    case_tag:'Confidential · Free · Non-binding',case_title:'Submit Case',
+    case_step1:'Personal Data',case_step2:'Case Details',case_step3:'Review & Submit',
+    case_name:'Full Name *',case_email:'Email Address *',case_phone:'Phone (optional)',case_type:'Type of Incident *',case_desc:'Description of Incident *',case_loss:'Estimated Loss (EUR) *',case_coins:'Cryptocurrencies',case_date:'Date of Incident (approx.)',
+    case_consent:'I agree that Finora may process my information confidentially to review my case. My data will not be shared with third parties without my consent.',
+    case_next:'Next',case_back:'← Back',case_submit:'Submit Case',case_summary:'Summary',
+    case_t_wallet:'Wallet Theft',case_t_exchange:'Exchange Fraud',case_t_phishing:'Phishing Attack',case_t_invest:'Investment Fraud',case_t_ransom:'Ransomware',case_t_other:'Other',
+    err_required:'Please fill in all required fields.',err_required2:'Please fill in all required fields and agree to the consent.',
+    case_success_title:'Case Successfully Submitted!',case_success_text:'We have registered your case and will respond within 4 hours.',
+    imprint_title:'Imprint',privacy_title:'Privacy Policy',
+    footer_tagline:'The trusted contact point for victims of cryptocurrency fraud in Germany, Austria, and Switzerland.',
+    footer_services:'Services',footer_legal:'Legal',
+    footer_rights:'© 2024 Finora GmbH. All rights reserved.'
+  }
+};
+
+var currentLang = 'de';
+function t(key){ return (T[currentLang]&&T[currentLang][key])||(T.de[key])||key; }
+function applyTranslations(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var v=t(el.getAttribute('data-i18n')); if(v) el.innerHTML=v;
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+    var v=t(el.getAttribute('data-i18n-placeholder')); if(v) el.placeholder=v;
+  });
+  var sub = document.getElementById('nav-sub');
+  if(sub) sub.innerHTML = currentLang==='en'
+    ? 'Asset Recovery<br>&amp; Digital Forensics'
+    : 'Krypto-Rückgewinnung<br>&amp; Asset Recovery';
+}
+function setLang(lang){
+  currentLang=lang;
+  document.getElementById('btn-de').classList.toggle('active',lang==='de');
+  document.getElementById('btn-en').classList.toggle('active',lang==='en');
+  applyTranslations();
+}
+
+/* ─── THEME ─── */
+function toggleTheme(){
+  var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('theme-icon').textContent=isDark?'☀️':'🌙';
+}
+
+/* ─── NAVIGATION ─── */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  var pg=document.getElementById('page-'+id);
+  if(pg){pg.classList.add('active');window.scrollTo(0,0);}
+  ['home','about','services','contact'].forEach(function(n){
+    var el=document.getElementById('nl-'+n);
+    if(el) el.classList.toggle('active',n===id);
+  });
+  closeMobile();
+  if(id==='submit-case') resetCaseForm();
+}
+function toggleMobile(){document.getElementById('mobile-menu').classList.toggle('open');}
+function closeMobile(){document.getElementById('mobile-menu').classList.remove('open');}
+
+/* ─── QUICK FORM ─── */
+function submitQuickForm(e){
+  e.preventDefault();
+  var btn=document.getElementById('qf-submit');
+  btn.disabled=true;btn.innerHTML='<span>Wird gesendet…</span>';
+  setTimeout(function(){
+    document.getElementById('quick-form').classList.add('hidden');
+    document.getElementById('quick-success').classList.remove('hidden');
+  },1200);
+}
+function resetQuickForm(){
+  document.getElementById('quick-form').classList.remove('hidden');
+  document.getElementById('quick-success').classList.add('hidden');
+  var btn=document.getElementById('qf-submit');
+  btn.disabled=false;
+  btn.innerHTML='<span data-i18n="quick_submit">'+t('quick_submit')+'</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+  ['qf-first','qf-last','qf-email','qf-phone'].forEach(function(id){document.getElementById(id).value='';});
+}
+
+/* ─── CONTACT ─── */
+function submitContact(e){
+  e.preventDefault();
+  document.getElementById('contact-submit').disabled=true;
+  setTimeout(function(){
+    document.getElementById('contact-form').classList.add('hidden');
+    document.getElementById('contact-success').classList.remove('hidden');
+  },1000);
+}
+
+/* ─── FAQ ─── */
+function toggleFaq(btn){
+  var body=btn.nextElementSibling,icon=btn.querySelector('.accordion-icon'),isOpen=body.classList.contains('open');
+  document.querySelectorAll('.accordion-body.open').forEach(function(b){b.classList.remove('open');b.previousElementSibling.querySelector('.accordion-icon').classList.remove('open');});
+  if(!isOpen){body.classList.add('open');icon.classList.add('open');}
+}
+
+/* ─── CASE WIZARD ─── */
+var caseData={};
+function caseNext(step){
+  if(step===1){
+    var name=document.getElementById('f-name').value.trim(),email=document.getElementById('f-email').value.trim();
+    if(!name||!email){document.getElementById('e1').classList.remove('hidden');return;}
+    document.getElementById('e1').classList.add('hidden');
+    caseData.name=name;caseData.email=email;caseData.phone=document.getElementById('f-phone').value.trim();
+    document.getElementById('cs1').classList.add('hidden');document.getElementById('cs2').classList.remove('hidden');
+    document.getElementById('si-1').classList.remove('active');document.getElementById('si-1').classList.add('done');
+    document.getElementById('si-2').classList.add('active');
+  } else if(step===2){
+    var type=document.getElementById('f-type').value,desc=document.getElementById('f-desc').value.trim(),loss=document.getElementById('f-loss').value,consent=document.getElementById('f-consent').checked;
+    if(!type||!desc||!loss||!consent){document.getElementById('e2').classList.remove('hidden');return;}
+    document.getElementById('e2').classList.add('hidden');
+    caseData.type=type;caseData.desc=desc;caseData.loss=loss;caseData.coins=document.getElementById('f-coins').value;caseData.date=document.getElementById('f-date').value;
+    document.getElementById('cs2').classList.add('hidden');document.getElementById('cs3').classList.remove('hidden');
+    document.getElementById('si-2').classList.remove('active');document.getElementById('si-2').classList.add('done');
+    document.getElementById('si-3').classList.add('active');
+    var r=document.getElementById('case-review');
+    r.innerHTML='<div class="review-row"><span class="review-label">'+t('case_name')+'</span><span class="review-value">'+caseData.name+'</span></div>'+
+      '<div class="review-row"><span class="review-label">'+t('case_email')+'</span><span class="review-value">'+caseData.email+'</span></div>'+
+      (caseData.phone?'<div class="review-row"><span class="review-label">'+t('case_phone')+'</span><span class="review-value">'+caseData.phone+'</span></div>':'')+
+      '<div class="review-row"><span class="review-label">'+t('case_type')+'</span><span class="review-value">'+caseData.type.replace(/_/g,' ')+'</span></div>'+
+      '<div class="review-row"><span class="review-label">'+t('case_loss')+'</span><span class="review-value">€'+Number(caseData.loss).toLocaleString()+'</span></div>'+
+      (caseData.coins?'<div class="review-row"><span class="review-label">'+t('case_coins')+'</span><span class="review-value">'+caseData.coins+'</span></div>':'')+
+      (caseData.date?'<div class="review-row"><span class="review-label">'+t('case_date')+'</span><span class="review-value">'+caseData.date+'</span></div>':'');
+  }
+}
+function caseBack(step){
+  if(step===2){document.getElementById('cs2').classList.add('hidden');document.getElementById('cs1').classList.remove('hidden');document.getElementById('si-2').classList.remove('active');document.getElementById('si-1').classList.remove('done');document.getElementById('si-1').classList.add('active');}
+  else if(step===3){document.getElementById('cs3').classList.add('hidden');document.getElementById('cs2').classList.remove('hidden');document.getElementById('si-3').classList.remove('active');document.getElementById('si-2').classList.remove('done');document.getElementById('si-2').classList.add('active');}
+}
+function submitCase(){
+  var ref='FIN-'+Date.now().toString(36).toUpperCase();
+  document.getElementById('case-ref').textContent=ref;
+  document.getElementById('cs3').classList.add('hidden');
+  document.getElementById('case-steps').classList.add('hidden');
+  document.getElementById('case-success').classList.remove('hidden');
+}
+function resetCaseForm(){
+  ['cs1','cs2','cs3'].forEach(function(id){document.getElementById(id).classList.add('hidden');});
+  document.getElementById('cs1').classList.remove('hidden');
+  document.getElementById('case-success').classList.add('hidden');
+  document.getElementById('case-steps').classList.remove('hidden');
+  ['si-1','si-2','si-3'].forEach(function(id){var el=document.getElementById(id);el.classList.remove('active','done');});
+  document.getElementById('si-1').classList.add('active');
+  document.getElementById('e1').classList.add('hidden');
+  document.getElementById('e2').classList.add('hidden');
+  document.getElementById('f-consent').checked=false;
+}
+
+/* ════════════════════════════════════
+   PARALLAX — multi-layer hero
+════════════════════════════════════ */
+var pxLayers = [
+  { el: null, id: 'px-dots', speed: 0.42 },
+  { el: null, id: 'px-glow', speed: 0.28 },
+  { el: null, id: 'px-gold', speed: 0.18 },
+  { el: null, id: 'px-f1',   speed: 0.35 },
+  { el: null, id: 'px-f2',   speed: 0.20 },
+  { el: null, id: 'px-f3',   speed: 0.50 }
+];
+
+/* Cache elements once DOM ready */
+pxLayers.forEach(function(layer){
+  layer.el = document.getElementById(layer.id);
+});
+
+var ticking = false;
+function runParallax(){
+  var scrollY = window.pageYOffset;
+  pxLayers.forEach(function(layer){
+    if(layer.el){
+      layer.el.style.transform = 'translateY(' + (scrollY * layer.speed) + 'px)';
+    }
+  });
+  ticking = false;
+}
+
+window.addEventListener('scroll', function(){
+  if(!ticking){
+    requestAnimationFrame(runParallax);
+    ticking = true;
+  }
+}, { passive: true });
+
+/* ─── INIT ─── */
+applyTranslations();
+</script>
+</body>
+</html>
